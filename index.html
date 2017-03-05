@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta HTTP-EQUIV="EXPIRES" CONTENT="-1">
+		<title>Computing Science 309 Warehouse Wars</title>
+		<script language="javascript" src="jquery-3.1.1.min.js" > </script>
+		<script language="javascript" src="ww.js" > </script>
+
+		<script> 
+			stage=null;
+			interval=null;
+			function setupGame(){
+				stage=new Stage(20,20,"stage");
+				stage.initialize();
+			}
+			function startGame(){
+				// YOUR CODE GOES HERE
+			}
+			function pauseGame(){
+				// YOUR CODE GOES HERE
+			}
+			// YOUR CODE GOES HERE
+
+			function loginFunction(){
+			}
+			function movePlayer(direction){
+				stage.movePlayer(direction);
+			}
+			function readKeyboard(event){
+
+				input = String.fromCharCode(event.keyCode);
+				input = input.toLowerCase();
+
+				if(input == "w") {
+			    	stage.movePlayer("N");
+			    }
+			    if(input == "s") {
+			    	stage.movePlayer("S");
+			    }
+			    if(input == "d") {
+			    	stage.movePlayer("E");
+			    }
+			    if(input == "a") {
+			    	stage.movePlayer("W");
+			    }
+			    if(input == "q") {
+			    	stage.movePlayer("NW");
+			    }
+			    if(input == "e") {
+			    	stage.movePlayer("NE");
+			    }
+			    if(input == "z") {
+			    	stage.movePlayer("SW");
+			    }
+			    if(input == "c") {
+			    	stage.movePlayer("SE");
+			    }
+				step();
+			}
+			function step(){
+//				stage.moveMonsters();
+				stage.step();
+			}
+
+			$(function(){
+				$('#LoginPage').hide();
+				$('#ProfilePage').hide();
+
+				setupGame();
+				startGame();
+
+				if(interval==null){
+					interval=setInterval(step,500);
+				}
+		
+				document.addEventListener('keydown', function(event) { readKeyboard(event); });
+				$('#RegisterButton').click(function(){ 
+					$('#LoginPage').hide();
+					$('#ProfilePage').show(); 
+
+				});
+
+			});
+		</script>
+		<style>
+			#stage td {
+				border:1px solid black;
+			}
+			.legend td {
+				width:50px;
+				text-align: center;
+			}
+			.legend td img {
+				
+    			margin-left: auto;
+    			margin-right: auto;
+    			display:block;
+				border:1px solid black;
+			}
+			.controls td img {
+				width:70px;
+				height:70px;
+			}
+
+		</style>
+	</head>
+	<body bgcolor="ffffff">
+		<center>
+			<h1>Warehouse Wars</h1>
+
+
+			<div id="LoginPage">
+				<h1>Login</h1>
+				<form>
+					<fieldset>
+
+						<legend>Login</legend>
+
+						<p> <label for="user">User</label><input type="text" name="user" value=""></input> </p>
+						<p> <label for="password">Password</label><input type="password" name="password"></input> </p>
+
+						<input id="LogInButton" type="Button" value="Login"/>
+						<input id="RegisterButton" type="Button" value ="Register"/>
+						<input id="ForgotButton" type="Button" value ="Forgot Password"/>
+
+					</fieldset>
+				</form>	
+			</div>
+
+			<div id="ProfilePage">
+				<h1>Profile</h1>
+			    <form>
+			        <fieldset>
+			            <legend>Registration</legend>
+			            <p><label for="user">User</label> <input type="text" name="user">
+			            <p><label for="password">Password</label><input type="password" name="password">
+			            <p><label for="firstName">First Name</label><input type="text" name="firstName">
+			            <p><label for="lastName">Last Name</label><input type="text" name="lastName">
+			            <p><label for="email">email</label><input type="text" name="email">
+			            <p><input id="submitRegister" type="button" value="Submit"/>
+			        </fieldset>
+
+			</div>
+
+
+			<table>
+				<tr>
+					<td> <div id="stage"> </div></td> 
+					<td>
+						<center>
+							<h2>Legend</h2>
+							<table class="legend">
+								<tr>
+									<td> <img src="icons/blank.gif" id="blankImage" /> </td>
+									<td> <img src="icons/emblem-package-2-24.png" id="boxImage" /> </td>
+									<td> <img src="icons/face-cool-24.png" id="playerImage" /> </td>
+									<td> <img src="icons/face-devil-grin-24.png" id="monsterImage" /> </td>
+									<td> <img src="icons/wall.jpeg" width="20px" height="20px" id="wallImage" /> </td>
+								</tr>
+								<tr>
+									<td> Empty <br/> Square </td>
+									<td> Box </td>
+									<td> Player </td>
+									<td> Monster </td>
+									<td> Wall </td>
+								</tr>
+							</table>
+							<h2>Controls</h2>
+							<table class="controls">
+								<tr>
+									<td><img src="icons/north_west.svg" onclick=movePlayer('NW'); /></td>
+									<td><img src="icons/north.svg" onclick=movePlayer('N'); /></td>
+									<td><img src="icons/north_east.svg" onclick=movePlayer('NE'); /></td>
+								</tr>
+								<tr>
+									<td><img src="icons/west.svg" onclick=movePlayer('W'); /></td>
+									<td>&nbsp;</td>
+									<td><img src="icons/east.svg" onclick=movePlayer('E'); /></td>
+								</tr>
+								<tr>
+									<td><img src="icons/south_west.svg" onclick=movePlayer('SW'); /></td>
+									<td><img src="icons/south.svg" onclick=movePlayer('S'); /></td>
+									<td><img src="icons/south_east.svg" onclick=movePlayer('SE'); /></td>
+								</tr>
+							</table>
+						</center>
+					</td>
+				</tr>
+			</table>
+		</center>
+	</body>
+</html>
+
