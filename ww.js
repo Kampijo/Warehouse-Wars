@@ -211,9 +211,8 @@ Stage.prototype.movePlayer=function(direction){
 					this.actors[playerIndex]["x"]+=xDir;
 					this.actors[playerIndex]["y"]+=yDir;
 				}	 
-			}
-	
-}'
+			}	
+}
 
 Stage.prototype.moveBoxes=function(x, y, direction){
 
