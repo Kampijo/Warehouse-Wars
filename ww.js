@@ -152,71 +152,67 @@ Stage.prototype.movePlayer=function(direction){
 		for(var i = 0; i<this.actors.length;i++){
 			if(this.actors[i]["type"]=="player"){
 				var actor = this.actors[i];
-				var oldActor = this.actors[i];
+				var playerIndex = i;
 				var xDir = 0;
 				var yDir = 0;
 				break;
 			}
 		}
 		// IM FUCKING TIRED, CHANGE THIS SHIT BACK TO XDIR YDIR FORM, BECAUSE THIS SHIT IS JUST BEING DUMB, REMEMBER TO COMMENT OUT OR BACK THIS UP
-		var movement = this.checkMovement(actor["x"], actor["y"], direction);
-		if(movement){
-			this.removeActor(actor);
+	//	var movement = this.checkMovement(actor["x"], actor["y"], direction);
+	//	if(movement){
 			this.setImage(actor["x"], actor["y"], this.blankImageSrc);
 			switch (direction){
 				case 'N':
 					if(this.check(actor["y"]-1, actor["x"])){
-						actor["y"]--;
+						yDir--;
 					}
 					break;
 				case 'S':
 					if(this.check(actor["y"]+1, actor["x"])){
-						actor["y"]++;
+						yDir++;
 					}
 					break;
 				case 'W':
 					if(this.check(actor["y"], actor["x"]-1)){
-						actor["x"]--;
+						xDir--;
 					}
 					break;
 				case 'E':
 					if(this.check(actor["y"], actor["x"]+1)){
-						actor["x"]++;
+						xDir++;
 					}
 					break;
 				case 'NW':
 					if(this.check(actor["y"]-1, actor["x"]-1)){
-						actor["x"]--;
-						actor["y"]--;
+						xDir--;
+						yDir--;
 					}
 					break;
 				case 'NE':
 					if(this.check(actor["y"]-1, actor["x"]+1)){
-						actor["x"]++;
-						actor["y"]--;
+						xDir++;
+						yDir--;
 					}
 					break;
 				case 'SW':
 					if(this.check(actor["y"]+1, actor["x"]-1)){
-						actor["x"]--;
-						actor["y"]++;
+						xDir--;
+						yDir++;
 					}
 					break;
 				case 'SE':
 					if(this.check(actor["y"]+1, actor["x"]+1)){
-						actor["x"]++;
-						actor["y"]++;
+						xDir++;
+						yDir++;
 					}
 					break;
 			}
-			if(this.moveBoxes(actor["x"], actor["y"], direction)){
-				this.addActor(actor);
-			} else {
-				console.log(actor["x"],","+actor["y"]);
-				console.log(oldActor["x"]+","+oldActor["y"]);
-				this.addActor(oldActor);
-			}
-		}
+			if(this.moveBoxes(actor["x"]+xDir, actor["y"]+yDir, direction)){
+				this.actors[playerIndex]["x"]+=xDir;
+				this.actors[playerIndex]["y"]+=yDir
+			} 
+	//	}
 }
 
 Stage.prototype.checkMovement=function(x,y,direction){
@@ -271,68 +267,66 @@ Stage.prototype.checkMovement=function(x,y,direction){
 Stage.prototype.moveBoxes=function(x, y, direction){
 
 	var actor = this.getActor(x, y);
-	var oldActor = this.getActor(x,y);
+	var index = this.actors.indexOf(actor);
 	if(actor == null){
-		console.log(true);
+		
 		return true;
 	}
 	if(actor["type"] == "monster"){
-		console.log(false);
 		return false;
 	}
-	this.removeActor(actor);
 	
 	switch (direction){
-		case 'N':
-			if(this.check(actor["y"]-1, actor["x"])){
-				actor["y"]--;
+			case 'N':
+				if(this.check(actor["y"]-1, actor["x"])){
+					yDir--;
+				}
+				break;
+			case 'S':
+				if(this.check(actor["y"]+1, actor["x"])){
+					yDir++;
+				}
+				break;
+			case 'W':
+				if(this.check(actor["y"], actor["x"]-1)){
+					xDir--;
+				}
+				break;
+			case 'E':
+				if(this.check(actor["y"], actor["x"]+1)){
+					xDir++;
+				}
+				break;
+			case 'NW':
+				if(this.check(actor["y"]-1, actor["x"]-1)){
+					xDir--;
+					yDir--;
+				}
+				break;
+			case 'NE':
+				if(this.check(actor["y"]-1, actor["x"]+1)){
+					xDir++;
+					yDir--;
+				}
+				break;
+			case 'SW':
+				if(this.check(actor["y"]+1, actor["x"]-1)){
+					xDir--;
+					yDir++;
+				}
+				break;
+			case 'SE':
+				if(this.check(actor["y"]+1, actor["x"]+1)){
+					xDir++;
+					yDir++;
+				}
+				break;
 			}
-			break;
-		case 'S':
-			if(this.check(actor["y"]+1, actor["x"])){
-				actor["y"]++;
-			}
-			break;
-		case 'W':
-			if(this.check(actor["y"], actor["x"]-1)){
-				actor["x"]--;
-			}
-			break;
-		case 'E':
-			if(this.check(actor["y"], actor["x"]+1)){
-				actor["x"]++;
-			}
-			break;
-		case 'NW':
-			if(this.check(actor["y"]-1, actor["x"]-1)){
-				actor["x"]--;
-				actor["y"]--;
-			}
-			break;
-		case 'NE':
-			if(this.check(actor["y"]-1, actor["x"]+1)){
-				actor["x"]++;
-				actor["y"]--;
-			}
-			break;
-		case 'SW':
-			if(this.check(actor["y"]+1, actor["x"]-1)){
-				actor["x"]--;
-				actor["y"]++;
-			}
-			break;
-		case 'SE':
-			if(this.check(actor["y"]+1, actor["x"]+1)){
-				actor["x"]++;
-				actor["y"]++;
-			}
-			break;
-	}
-	if(this.moveBoxes(actor["x"], actor["y"], direction)){
-		this.addActor(actor);
+	if(this.moveBoxes(actor["x"]+xDir, actor["y"]+yDir, direction)){
+		this.actors[playerIndex]["x"]+=xDir;
+		this.actors[playerIndex]["y"]+=xDir;
 		return true;
 	} else {
-		this.addActor(oldActor);
 		return false;
 	}
 	
