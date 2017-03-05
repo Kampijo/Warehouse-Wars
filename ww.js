@@ -210,7 +210,7 @@ Stage.prototype.movePlayer=function(direction){
 			}
 			if(this.moveBoxes(actor["x"]+xDir, actor["y"]+yDir, direction)){
 				this.actors[playerIndex]["x"]+=xDir;
-				this.actors[playerIndex]["y"]+=yDir
+				this.actors[playerIndex]["y"]+=yDir;
 			} 
 	//	}
 }
@@ -324,7 +324,7 @@ Stage.prototype.moveBoxes=function(x, y, direction){
 			}
 	if(this.moveBoxes(actor["x"]+xDir, actor["y"]+yDir, direction)){
 		this.actors[playerIndex]["x"]+=xDir;
-		this.actors[playerIndex]["y"]+=xDir;
+		this.actors[playerIndex]["y"]+=yDir;
 		return true;
 	} else {
 		return false;
