@@ -108,6 +108,17 @@ Stage.prototype.randomMove=function(){
 	}
 	return move;
 }
+Stage.prototype.checkMovement=function(x,y){
+	for(var i = -1; i <= 1; i++){
+		for(var j = -1; j <= 1; j++){
+			if(this.check(x+i,y+j) && (this.getActor(x+i,y+j) == null || this.getActor(x+i, y+j)["type"]=="player")){
+				return true;
+			}
+		}
+	} 
+	return false;
+	
+}
 Stage.prototype.moveMonsters=function(){
 	for(var i=0;i<this.actors.length;i++){
 		if(this.actors[i]["type"]=="monster"){
@@ -115,7 +126,7 @@ Stage.prototype.moveMonsters=function(){
 			yDir = this.randomMove();
 			actor = this.actors[i];
 			nextCell = this.getActor(actor["x"]+xDir,actor["y"]+yDir);
-			if(this.check(actor["y"]+yDir, actor["x"]+xDir) && 
+			if(this.checkMovement(actor["x"], actor["y"]) && 
 				(nextCell == null || nextCell["type"] == "player")){
 				this.setImage(actor["x"], actor["y"], this.blankImageSrc);
 				this.actors[i]["y"]+=yDir;
@@ -126,6 +137,8 @@ Stage.prototype.moveMonsters=function(){
 					clearInterval(interval);
 					console.log("GAME OVER");
 				}
+			} else {
+				this.removeActor(actor);
 			}
 		}
 	}

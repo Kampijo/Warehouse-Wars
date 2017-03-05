@@ -15,51 +15,57 @@
 				stage.initialize();
 			}
 			function startGame(){
-				// YOUR CODE GOES HERE
+				if(interval == null){
+					interval = setInterval(step, 500);
+				}
 			}
 			function pauseGame(){
-				// YOUR CODE GOES HERE
+				clearInterval(interval);
+				interval=null;
 			}
-			// YOUR CODE GOES HERE
 
 			function loginFunction(){
 			}
 			function movePlayer(direction){
-				stage.movePlayer(direction);
+				if(interval != null){
+					stage.movePlayer(direction);
+				}
 			}
 			function readKeyboard(event){
 
-				input = String.fromCharCode(event.keyCode);
-				input = input.toLowerCase();
+				if(interval != null){
+					input = String.fromCharCode(event.keyCode);
+					input = input.toLowerCase();
 
-				if(input == "w") {
-			    	stage.movePlayer("N");
-			    }
-			    if(input == "s") {
-			    	stage.movePlayer("S");
-			    }
-			    if(input == "d") {
-			    	stage.movePlayer("E");
-			    }
-			    if(input == "a") {
-			    	stage.movePlayer("W");
-			    }
-			    if(input == "q") {
-			    	stage.movePlayer("NW");
-			    }
-			    if(input == "e") {
-			    	stage.movePlayer("NE");
-			    }
-			    if(input == "z") {
-			    	stage.movePlayer("SW");
-			    }
-			    if(input == "c") {
-			    	stage.movePlayer("SE");
-			    }
-				step();
+					if(input == "w") {
+				    	stage.movePlayer("N");
+				    }
+				    if(input == "s") {
+				    	stage.movePlayer("S");
+				    }
+				    if(input == "d") {
+				    	stage.movePlayer("E");
+				    }
+				    if(input == "a") {
+				    	stage.movePlayer("W");
+				    }
+				    if(input == "q") {
+				    	stage.movePlayer("NW");
+				    }
+				    if(input == "e") {
+				    	stage.movePlayer("NE");
+				    }
+				    if(input == "z") {
+				    	stage.movePlayer("SW");
+				    }
+				    if(input == "c") {
+				    	stage.movePlayer("SE");
+				    }
+	//				step();
+				}
 			}
 			function step(){
-//				stage.moveMonsters();
+				stage.moveMonsters();
 				stage.step();
 			}
 
@@ -70,10 +76,6 @@
 				setupGame();
 				startGame();
 
-				if(interval==null){
-					interval=setInterval(step,500);
-				}
-		
 				document.addEventListener('keydown', function(event) { readKeyboard(event); });
 				$('#RegisterButton').click(function(){ 
 					$('#LoginPage').hide();
