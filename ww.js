@@ -158,9 +158,7 @@ Stage.prototype.movePlayer=function(direction){
 				break;
 			}
 		}
-		// IM FUCKING TIRED, CHANGE THIS SHIT BACK TO XDIR YDIR FORM, BECAUSE THIS SHIT IS JUST BEING DUMB, REMEMBER TO COMMENT OUT OR BACK THIS UP
-	//	var movement = this.checkMovement(actor["x"], actor["y"], direction);
-	//	if(movement){
+		
 			this.setImage(actor["x"], actor["y"], this.blankImageSrc);
 			switch (direction){
 				case 'N':
@@ -208,74 +206,28 @@ Stage.prototype.movePlayer=function(direction){
 					}
 					break;
 			}
-			if(this.moveBoxes(actor["x"]+xDir, actor["y"]+yDir, direction)){
-				this.actors[playerIndex]["x"]+=xDir;
-				this.actors[playerIndex]["y"]+=yDir;
-			} 
-	//	}
-}
-
-Stage.prototype.checkMovement=function(x,y,direction){
-
-	var xDir = 0;
-	var yDir = 0;
-	var curX = x;
-	var curY = y;
-	switch (direction){
-		case 'N':
-			yDir = -1;
-			break;
-		case 'S':
-			yDir = 1;
-			break;
-		case 'W':
-			xDir = -1;
-			break;
-		case 'E':
-			xDir = 1;
-			break;
-		case 'NW':
-			xDir = -1;
-			yDir = -1;
-			break;
-		case 'NE':
-			xDir = 1;
-			yDir = -1;
-			break;
-		case 'SW':
-			xDir = -1;
-			yDir = 1;
-			break;
-		case 'SE':
-			xDir = 1;
-			yDir = 1;
-			break;
-	}
-	curX+=xDir;
-	curY+=yDir;
-	while(this.check(curX,curY)){
-		actor = this.getActor(curX,curY);
-		if(actor == null){
-			return true;
-		}
-		curX+=xDir;
-		curY+=yDir;
-	}
-	return false;
-}
+			if(xDir != 0 || yDir != 0){
+				if(this.moveBoxes(actor["x"]+xDir, actor["y"]+yDir, direction)){
+					this.actors[playerIndex]["x"]+=xDir;
+					this.actors[playerIndex]["y"]+=yDir;
+				}	 
+			}
+	
+}'
 
 Stage.prototype.moveBoxes=function(x, y, direction){
 
 	var actor = this.getActor(x, y);
 	var index = this.actors.indexOf(actor);
 	if(actor == null){
-		
 		return true;
 	}
 	if(actor["type"] == "monster"){
 		return false;
 	}
-	
+	var xDir = 0;
+	var yDir = 0;
+		
 	switch (direction){
 			case 'N':
 				if(this.check(actor["y"]-1, actor["x"])){
@@ -322,10 +274,15 @@ Stage.prototype.moveBoxes=function(x, y, direction){
 				}
 				break;
 			}
+
+	if(xDir != 0 || yDir != 0){
 	if(this.moveBoxes(actor["x"]+xDir, actor["y"]+yDir, direction)){
-		this.actors[playerIndex]["x"]+=xDir;
-		this.actors[playerIndex]["y"]+=yDir;
+		this.actors[index]["x"]+=xDir;
+		this.actors[index]["y"]+=yDir;
 		return true;
+	} else {
+		return false;
+	}
 	} else {
 		return false;
 	}
