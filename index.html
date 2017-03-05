@@ -10,13 +10,14 @@
 		<script> 
 			stage=null;
 			interval=null;
+			score=0;
 			function setupGame(){
 				stage=new Stage(20,20,"stage");
 				stage.initialize();
 			}
 			function startGame(){
 				if(interval == null){
-					interval = setInterval(step, 500);
+					interval = setInterval(step, 1000);
 				}
 			}
 			function pauseGame(){
@@ -61,12 +62,14 @@
 				    if(input == "c") {
 				    	stage.movePlayer("SE");
 				    }
-	//				step();
+					stage.step();
 				}
 			}
 			function step(){
 				stage.moveMonsters();
 				stage.step();
+				score++;
+				$('#score').html(score);
 			}
 
 			$(function(){
@@ -88,6 +91,9 @@
 		<style>
 			#stage td {
 				border:1px solid black;
+			}
+			#score {
+				font-size: 250%;
 			}
 			.legend td {
 				width:50px;
@@ -151,6 +157,7 @@
 					<td> <div id="stage"> </div></td> 
 					<td>
 						<center>
+							<h2>Score</h2> <div id="score"> &nbsp; </div>
 							<h2>Legend</h2>
 							<table class="legend">
 								<tr>
