@@ -17,30 +17,30 @@ function pauseGame(){
 }
 
 function loginFunction(){
-	if(!localStorage.user) localStorage.user=$("#loginuser").val();
-	if(!localStorage.pass) localStorage.pass=$("#loginpasswd").val();
 	var params = {
               method: "GET",
-              url: "api/api.php/"+localStorage.user,
-              headers: { "Authorization": "Basic " + btoa(localStorage.user + ":" + localStorage.pass },
+              url: "api/api.php/"+$("#loginuser").val(),
+              headers: { "Authorization": "Basic " + btoa($("#loginuser").val() + ":" + $("#loginpasswd").val())}
           };
 	$.ajax(params).done(function(data){
 		alert(data["status"]);
-		if(data["status"] != "Success!"){
-			$("#loginuser").css('background-color', 'red');
-			$("#loginpasswd").css('background-color', 'red');
-		} else {
-			$("#LoginPage").hide();
-			$("#Hiscores").hide();
-            setupGame();
-            startGame();
-            $("#game").show();
-		}	
+		if(!sessionStorage.user) sessionStorage.user=$("#loginuser").val();
+		if(!sessionStorage.pass) sessionStorage.pass=$("#loginpasswd").val();
+		$("#LoginPage").hide();
+		$("#Hiscores").hide();
+        setupGame();
+        startGame();
+        $("#game").show();	
+	}).fail(function(data){
+		var response = JSON.parse(data["responseText"]);
+		alert(response["status"]);
+		$("#loginuser").css('background-color', 'red');
+        $("#loginpasswd").css('background-color', 'red');
 	});
 }
 function registerFunction(){
 	var input = { "user": $("#registeruser").val(), "password": $("#registerpasswd").val(),
-                       "email": $("#registeremail").val()};
+                       "email": $("#registeremail").val(), "type":"registration"};
 	var params = {
 			method: "PUT",
 			url: "api/api.php",
@@ -50,16 +50,28 @@ function registerFunction(){
 		};
 	$.ajax(params).done(function(data){
 		alert(data["status"]);
-		if(data["status"] != "Success!"){
-			$("#registeruser").css('background-color', 'red');
-		} else {
-			$("#RegisterPage").hide();
-			$("#Hiscores").hide();
-			setupGame();
-			startGame();
-			$("#game").show();
-		}
+		$("#RegisterPage").hide();
+		$("#Hiscores").hide();
+		setupGame();
+		startGame();
+		$("#game").show();
+	}).fail(function(data){
+		var response = JSON.parse(data["responseText"]);
+		alert(response["status"]);
+		$("#registeruser").css('background-color', 'red');
 	});
+}
+function putScore(){
+	var input = { "type":"score", "score":score};
+	var params = {
+			method: "PUT",
+			url: "api/api.php",
+			user: sessionStorage.user,
+			password: sessionStorage.pass,
+			data: JSON.stringify(input),
+			headers: { "Authorization": "Basic " + btoa($("#loginuser").val() + ":" + $("#loginpasswd").val())}
+		};
+	$.ajax(params).done(alertStuff);
 }
 function movePlayer(direction){
 	if(interval != null){
@@ -100,10 +112,10 @@ function readKeyboard(event){
 	}
 }
 function step(){
-	stage.moveMonsters();
-	stage.step();
 	score++;
 	$('#score').html(score);
+	stage.moveMonsters();
+	stage.step();
 }
 
 $(function(){
@@ -111,7 +123,7 @@ $(function(){
 	$('#LoginPage').show();
 	$('#RegisterPage').hide();
 	$('#game').hide();
-
+	$('#score').html(score);
 	document.addEventListener('keydown', function(event) { readKeyboard(event); });
 
 	$('#RegisterButton').click(function(){ 
