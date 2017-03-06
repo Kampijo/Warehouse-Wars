@@ -11,25 +11,38 @@ $dbconn = pg_connect("host=mcsdb.utm.utoronto.ca dbname=lopeznyg_309 user=lopezn
 
 switch ($method) {
 	case 'GET':
-		$userCheck = $request[0];
+		$type = $request[0];
 		$user = $_SERVER["PHP_AUTH_USER"];
 		$pass = $_SERVER["PHP_AUTH_PW"];
+		if($type == "user"){	
+			if($request[1] == $user){
+				pg_prepare($dbconn, "loginUser", "SELECT * FROM appuser WHERE username=$1 and password=$2");
+				$result = pg_execute($dbconn, "loginUser", array($user, $pass));
+				$row = pg_fetch_array($result);
+				$reply["status"] = ($row == false) ? "Incorrect information entered." : "Success!";
 
-		if($userCheck == $user){
-			pg_prepare($dbconn, "loginUser", "SELECT username FROM appuser WHERE username=$1 and password=$2");
-			$result = pg_execute($dbconn, "loginUser", array($user, $pass));
-			$row = pg_fetch_array($result);
-			$reply["status"] = ($row == false) ? "Incorrect information entered." : "Success!";
-
-			if($row != false){
-				$reply["name"] = $row["username"];
-				$reply["email"] = $row["email"];
-				header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+				if($row != false){
+					$reply["name"] = $row["username"];
+					$reply["email"] = $row["email"];
+					header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+				} else {
+					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
+				}
 			} else {
 				header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 			}
 		} else {
-			header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
+			pg_prepare($dbconn, "getHiScores", "SELECT * FROM scores ORDER BY score DESC LIMIT 10");
+			$result = pg_execute($dbconn, "getHiScores");
+			$hiscoreTable = "";
+			while($row = pg_fetch_array($result)){
+				$hiscoreTable=$hiscoreTable."<tr><td>";
+				$hiscoreTable=$hiscoreTable.$row["username"];
+				$hiscoreTable=$hiscoreTable."</td><td>";
+				$hiscoreTable=$hiscoreTable.$row["score"]."</td></tr>";
+			}
+			$reply["status"]="Success!";
+			$reply["response"] = $hiscoreTable;
 		}
 		break;
 	case 'PUT':

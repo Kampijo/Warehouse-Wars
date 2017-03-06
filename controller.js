@@ -19,7 +19,7 @@ function pauseGame(){
 function loginFunction(){
 	var params = {
               method: "GET",
-              url: "api/api.php/"+$("#loginuser").val(),
+              url: "api/api.php/user/"+$("#loginuser").val(),
               headers: { "Authorization": "Basic " + btoa($("#loginuser").val() + ":" + $("#loginpasswd").val())}
           };
 	$.ajax(params).done(function(data){
@@ -62,7 +62,7 @@ function registerFunction(){
 	});
 }
 function putScore(){
-	var input = { "type":"score", "score":score};
+	var input = {"type":"score", "score":score};
 	var params = {
 			method: "PUT",
 			url: "api/api.php",
@@ -71,7 +71,16 @@ function putScore(){
 			data: JSON.stringify(input),
 			headers: { "Authorization": "Basic " + btoa($("#loginuser").val() + ":" + $("#loginpasswd").val())}
 		};
-	$.ajax(params).done(alertStuff);
+	$.ajax(params).done();
+}
+function getHiscores(){
+	var params = {
+			method: "GET",
+			url: "api/api.php/hiScores"
+	};
+	$.ajax(params).done(function(data){
+		$("#hiscorestable").html(data["response"]);
+	});
 }
 function movePlayer(direction){
 	if(interval != null){
@@ -124,6 +133,8 @@ $(function(){
 	$('#RegisterPage').hide();
 	$('#game').hide();
 	$('#score').html(score);
+
+	getHiscores();
 	document.addEventListener('keydown', function(event) { readKeyboard(event); });
 
 	$('#RegisterButton').click(function(){ 
