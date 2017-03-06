@@ -11,6 +11,7 @@
 			stage=null;
 			interval=null;
 			score=0;
+			function alertStuff(data){ alert(JSON.stringify(data)); }
 			function setupGame(){
 				stage=new Stage(20,20,"stage");
 				stage.initialize();
@@ -26,6 +27,20 @@
 			}
 
 			function loginFunction(){
+		
+			}
+			function registerFunction(){
+				var input = { "user": $("#registeruser").val(), "password": $("#registerpasswd").val(),
+                                   "email": $("#registeremail").val()};
+				var params = {
+						method: "PUT",
+						url: "api/api.php",
+						data: JSON.stringify(input),
+						processData: false,
+						contentType: 'application/json; charset=UTF-8',
+						dataType: "json"
+					};
+				$.ajax(params).done(alertStuff);
 			}
 			function movePlayer(direction){
 				if(interval != null){
@@ -73,19 +88,27 @@
 			}
 
 			$(function(){
-				$('#LoginPage').hide();
+				$('#LoginPage').show();
 				$('#ProfilePage').hide();
 
-				setupGame();
-				startGame();
+				//setupGame();
+				//startGame();
 
 				document.addEventListener('keydown', function(event) { readKeyboard(event); });
+
 				$('#RegisterButton').click(function(){ 
 					$('#LoginPage').hide();
 					$('#ProfilePage').show(); 
 
 				});
-
+				$('#LoginButton').click(function(){
+					console.log("login clicked");
+					loginFunction();
+				});
+				$('#submitRegister').click(function(){
+					console.log("submit register clicked");
+					registerFunction();
+				});
 			});
 		</script>
 		<style>
@@ -125,10 +148,10 @@
 
 						<legend>Login</legend>
 
-						<p> <label for="user">User</label><input type="text" name="user" value=""></input> </p>
-						<p> <label for="password">Password</label><input type="password" name="password"></input> </p>
+						<p> <label for="user">User</label><input id="loginuser" type="text" name="user" value=""></input> </p>
+						<p> <label for="password">Password</label><input id="loginpasswd" type="password" name="password"></input> </p>
 
-						<input id="LogInButton" type="Button" value="Login"/>
+						<input id="LoginButton" type="Button" value="Login"/>
 						<input id="RegisterButton" type="Button" value ="Register"/>
 						<input id="ForgotButton" type="Button" value ="Forgot Password"/>
 
@@ -141,11 +164,9 @@
 			    <form>
 			        <fieldset>
 			            <legend>Registration</legend>
-			            <p><label for="user">User</label> <input type="text" name="user">
-			            <p><label for="password">Password</label><input type="password" name="password">
-			            <p><label for="firstName">First Name</label><input type="text" name="firstName">
-			            <p><label for="lastName">Last Name</label><input type="text" name="lastName">
-			            <p><label for="email">email</label><input type="text" name="email">
+			            <p><label for="user">User</label> <input id="registeruser" type="text" name="user">
+			            <p><label for="password">Password</label><input id="registerpasswd" type="password" name="password">
+			            <p><label for="email">email</label><input id="registeremail" type="text" name="email">
 			            <p><input id="submitRegister" type="button" value="Submit"/>
 			        </fieldset>
 
