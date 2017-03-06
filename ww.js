@@ -20,9 +20,6 @@ function Stage(width, height, stageElementID){
 	this.boxImageSrc=document.getElementById('boxImage').src;
 	this.wallImageSrc=document.getElementById('wallImage').src;
 
-	this.imgWidth = document.getElementById('boxImage').clientWidth;
-	this.imgHeight = document.getElementById('boxImage').clientHeight;
-
 	this.centerWidth = Math.floor(this.width/2);
 	this.centerHeight = Math.floor(this.height/2);
 }
@@ -39,7 +36,7 @@ Stage.prototype.initialize=function(){
 			var type = "";
 			if(i != this.centerHeight || j != this.centerWidth){
 				if(i == 0 || j == 0 || i == this.height-1 || j == this.width-1){
-					s+="<td><img id="+i+","+j+" src="+this.wallImageSrc+" width="+this.imgWidth+" height="+this.imgHeight+" /></td>";
+					s+="<td><img id="+i+","+j+" src="+this.wallImageSrc+" width=25 height=25 /></td>";
 				} else if(rand < 0.1){
 					s+="<td><img id="+i+","+j+" src="+this.monsterImageSrc+" /></td>";
 					type="monster";
