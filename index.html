@@ -13,7 +13,11 @@
 	<body bgcolor="ffffff">
 		<center>
 			<h1>Warehouse Wars</h1>
-
+			<nav id="links">
+				<a id="logout" href="javascript:logoutFunction();">Logout</a> |
+				<a id="profile" href="javascript:showProfile();">Profile</a> |
+				<a id="play" href="javascript:playGame();">Play Now</a> 
+			</nav>
 
 			<div id="LoginPage">
 				<h1>Login</h1>
@@ -49,11 +53,13 @@
 
 			<div id="Hiscores">
 				<h1>Hiscores</h1>
-				<table><div id="hiscorestable"> </div>
+				<table>
+					<div id="hiscorestable"> </div>
 				</table>
 			</div>
 
 			<div id="game">
+			<center>
 			<table>
 				<tr>
 					<td> <div id="stage"> </div></td> 
@@ -99,6 +105,7 @@
 					</td>
 				</tr>
 			</table>
+		</center>
 		</div>
 		</center>
 	</body>

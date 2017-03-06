@@ -15,7 +15,16 @@ function pauseGame(){
 	clearInterval(interval);
 	interval=null;
 }
-
+function resetGame(){
+	stage=null;
+	interval=null;
+	score=0;
+}
+function playGame(){
+	setupGame();
+	startGame();
+}
+function showProfile(){}
 function loginFunction(){
 	var params = {
               method: "GET",
@@ -28,8 +37,8 @@ function loginFunction(){
 		if(!sessionStorage.pass) sessionStorage.pass=$("#loginpasswd").val();
 		$("#LoginPage").hide();
 		$("#Hiscores").hide();
-        setupGame();
-        startGame();
+		$("#links").show();
+        playGame();
         $("#game").show();	
 	}).fail(function(data){
 		var response = JSON.parse(data["responseText"]);
@@ -37,6 +46,12 @@ function loginFunction(){
 		$("#loginuser").css('background-color', 'red');
         $("#loginpasswd").css('background-color', 'red');
 	});
+}
+function logoutFunction(){
+	sessionStorage.user=null;
+	sessionStorage.pass=null;
+	window.location.reload();
+	console.log("LOGGED OUT.");
 }
 function registerFunction(){
 	var input = { "user": $("#registeruser").val(), "password": $("#registerpasswd").val(),
@@ -52,8 +67,8 @@ function registerFunction(){
 		alert(data["status"]);
 		$("#RegisterPage").hide();
 		$("#Hiscores").hide();
-		setupGame();
-		startGame();
+		$("#links").show();
+		playGame();
 		$("#game").show();
 	}).fail(function(data){
 		var response = JSON.parse(data["responseText"]);
@@ -79,7 +94,13 @@ function getHiscores(){
 			url: "api/api.php/hiScores"
 	};
 	$.ajax(params).done(function(data){
-		$("#hiscorestable").html(data["response"]);
+		var hiscores = data["response"];
+		var scoreHTML = "<tr><td>User</td><td>Score</td></tr>";
+		for(var i = 0; i < hiscores.length; i++){
+			var row = hiscores[i];
+			scoreHTML = scoreHTML+"<tr><td>"+row.user+"</td><td>"+row.score+"</td></tr>";
+		}
+		$("#hiscorestable").html(scoreHTML);
 	});
 }
 function movePlayer(direction){
@@ -123,8 +144,8 @@ function readKeyboard(event){
 function step(){
 	score++;
 	$('#score').html(score);
-	stage.moveMonsters();
 	stage.step();
+	stage.moveMonsters();
 }
 
 $(function(){
@@ -132,6 +153,7 @@ $(function(){
 	$('#LoginPage').show();
 	$('#RegisterPage').hide();
 	$('#game').hide();
+	$('#links').hide();
 	$('#score').html(score);
 
 	getHiscores();

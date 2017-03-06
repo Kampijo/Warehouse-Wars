@@ -133,8 +133,7 @@ Stage.prototype.moveMonsters=function(){
 
     				this.setImage(this.actors[i]["x"], this.actors[i]["y"], this.monsterImageSrc);
     				if(nextCell != null && nextCell["type"] == "player"){
-    					clearInterval(interval);
-						interval = null;
+    					pauseGame();
 						putScore();
     					alert("GAME OVER!");
     				}

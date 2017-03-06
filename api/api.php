@@ -33,16 +33,13 @@ switch ($method) {
 			}
 		} else {
 			pg_prepare($dbconn, "getHiScores", "SELECT * FROM scores ORDER BY score DESC LIMIT 10");
-			$result = pg_execute($dbconn, "getHiScores");
-			$hiscoreTable = "";
+			$result = pg_execute($dbconn, "getHiScores", array());
+			$hiscores = array();
 			while($row = pg_fetch_array($result)){
-				$hiscoreTable=$hiscoreTable."<tr><td>";
-				$hiscoreTable=$hiscoreTable.$row["username"];
-				$hiscoreTable=$hiscoreTable."</td><td>";
-				$hiscoreTable=$hiscoreTable.$row["score"]."</td></tr>";
+				$hiscores[] = array("user" => $row["username"], "score" => $row["score"]);
 			}
 			$reply["status"]="Success!";
-			$reply["response"] = $hiscoreTable;
+			$reply["response"] = $hiscores;
 		}
 		break;
 	case 'PUT':
