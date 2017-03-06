@@ -11,6 +11,7 @@ $dbconn = pg_connect("host=mcsdb.utm.utoronto.ca dbname=lopeznyg_309 user=lopezn
 
 switch ($method) {
 	case 'GET':
+		$reply["request"] = $request;
 		break;
 	case 'PUT':
 		$user = $input["user"];
@@ -23,7 +24,7 @@ switch ($method) {
 		$reply["status"] = ($result == false) ? "User already exists!" : "Success!";
 		break;
 	case 'POST':
-		$user = $input["user"];
+	/*	$user = $input["user"];
 		$password = $input["password"];
 		$login = $input["login"];
 		
@@ -35,7 +36,7 @@ switch ($method) {
 			$reply["status"] = ($row == false) ? "Incorrect information entered." : "Success!";
 		} else {
 
-		}
+		} */
 
 		break;
 	case 'DELETE':

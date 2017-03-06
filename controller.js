@@ -17,15 +17,12 @@ function pauseGame(){
 }
 
 function loginFunction(){
-	var input = { "user": $("#loginuser").val(), "password": $("#loginpasswd").val(),
-					"login": true};
-	
+	if(!localStorage.user) localStorage.user=$("#loginuser").val();
+	if(!localStorage.pass) localStorage.pass=$("#loginpasswd").val();
 	var params = {
-              method: "POST",
-              url: "api/api.php",
-              data: JSON.stringify(input),
-              contentType: 'application/json; charset=UTF-8',
-              dataType: "json"
+              method: "GET",
+              url: "api/api.php/"+localStorage.user,
+              headers: { "Authorization": "Basic " + btoa(localStorage.user + ":" + localStorage.pass },
           };
 	$.ajax(params).done(function(data){
 		alert(data["status"]);
