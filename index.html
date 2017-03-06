@@ -27,7 +27,28 @@
 			}
 
 			function loginFunction(){
-		
+				var input = { "user": $("#loginuser").val(), "password": $("#loginpasswd").val(),
+								"login": true};
+				
+				var params = {
+                          method: "POST",
+                          url: "api/api.php",
+                          data: JSON.stringify(input),
+                          contentType: 'application/json; charset=UTF-8',
+                          dataType: "json"
+                      };
+				$.ajax(params).done(function(data){
+					alert(data["status"]);
+					if(data["status"] != "Success!"){
+						$("#loginuser").css('background-color', 'red');
+						$("#loginpasswd").css('background-color', 'red');
+					} else {
+						$("#LoginPage").hide();
+                        setupGame();
+                        startGame();
+                        $("#game").show();
+					}	
+				});
 			}
 			function registerFunction(){
 				var input = { "user": $("#registeruser").val(), "password": $("#registerpasswd").val(),
@@ -36,11 +57,20 @@
 						method: "PUT",
 						url: "api/api.php",
 						data: JSON.stringify(input),
-						processData: false,
 						contentType: 'application/json; charset=UTF-8',
 						dataType: "json"
 					};
-				$.ajax(params).done(alertStuff);
+				$.ajax(params).done(function(data){
+					alert(data["status"]);
+					if(data["status"] != "Success!"){
+						$("#registeruser").css('background-color', 'red');
+					} else {
+						$("#RegisterPage").hide();
+						setupGame();
+						startGame();
+						$("#game").show();
+					}
+				});
 			}
 			function movePlayer(direction){
 				if(interval != null){
@@ -88,26 +118,25 @@
 			}
 
 			$(function(){
-				$('#LoginPage').show();
-				$('#ProfilePage').hide();
 
-				//setupGame();
-				//startGame();
+				$('#LoginPage').show();
+				$('#RegisterPage').hide();
+				$('#game').hide();
 
 				document.addEventListener('keydown', function(event) { readKeyboard(event); });
 
 				$('#RegisterButton').click(function(){ 
 					$('#LoginPage').hide();
-					$('#ProfilePage').show(); 
+					$('#RegisterPage').show(); 
 
 				});
 				$('#LoginButton').click(function(){
-					console.log("login clicked");
 					loginFunction();
 				});
 				$('#submitRegister').click(function(){
-					console.log("submit register clicked");
-					registerFunction();
+					if($('#registeruser')[0].checkValidity() && $('#registerpasswd')[0].checkValidity() && $('#registeremail')[0].checkValidity()){
+						registerFunction();
+					}
 				});
 			});
 		</script>
@@ -148,31 +177,36 @@
 
 						<legend>Login</legend>
 
-						<p> <label for="user">User</label><input id="loginuser" type="text" name="user" value=""></input> </p>
-						<p> <label for="password">Password</label><input id="loginpasswd" type="password" name="password"></input> </p>
+						<p> <label for="user">User</label><input id="loginuser" type="text" name="user" value="" required>
+						<p> <label for="password">Password</label><input id="loginpasswd" type="password" name="password" required></p>
 
-						<input id="LoginButton" type="Button" value="Login"/>
-						<input id="RegisterButton" type="Button" value ="Register"/>
-						<input id="ForgotButton" type="Button" value ="Forgot Password"/>
+						<input id="LoginButton" type="button" value="Login"/>
+						<input id="RegisterButton" type="button" value ="Register"/>
+					<!--	<input id="ForgotButton" type="button" value ="Forgot Password"/> -->
 
 					</fieldset>
 				</form>	
 			</div>
 
-			<div id="ProfilePage">
-				<h1>Profile</h1>
+			<div id="RegisterPage">
+				<h1>Registration</h1>
 			    <form>
 			        <fieldset>
 			            <legend>Registration</legend>
-			            <p><label for="user">User</label> <input id="registeruser" type="text" name="user">
-			            <p><label for="password">Password</label><input id="registerpasswd" type="password" name="password">
-			            <p><label for="email">email</label><input id="registeremail" type="text" name="email">
+			            <p><label for="user">User</label> <input id="registeruser" type="text" name="user" required>
+			            <p><label for="password">Password</label><input id="registerpasswd" type="password" title="8 characters minimum. At lease one uppercase character and one number required." 
+															pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{8,}$" name="password" required>
+			            <p><label for="email">email</label><input id="registeremail" type="email" name="email" required>
 			            <p><input id="submitRegister" type="button" value="Submit"/>
 			        </fieldset>
-
+				</form>
 			</div>
 
+			<div id="Hiscores">
+				<h1>Hiscores</h1>
+			</div>
 
+			<div id="game">
 			<table>
 				<tr>
 					<td> <div id="stage"> </div></td> 
@@ -218,6 +252,7 @@
 					</td>
 				</tr>
 			</table>
+		</div>
 		</center>
 	</body>
 </html>

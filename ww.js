@@ -138,7 +138,7 @@ Stage.prototype.moveMonsters=function(){
     				if(nextCell != null && nextCell["type"] == "player"){
     					clearInterval(interval);
 						interval = null;
-    					console.log("GAME OVER");
+    					alert("GAME OVER");
     				}
                 }
 			} else {
