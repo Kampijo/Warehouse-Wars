@@ -17,7 +17,7 @@ switch ($method) {
 
 		if($userCheck == $user){
 			pg_prepare($dbconn, "loginUser", "SELECT username FROM appuser WHERE username=$1 and password=$2");
-			$result = pg_execute($dbconn, "loginUser", array($user, $password));
+			$result = pg_execute($dbconn, "loginUser", array($user, $pass));
 			$row = pg_fetch_array($result);
 			$reply["status"] = ($row == false) ? "Incorrect information entered." : "Success!";
 
@@ -34,13 +34,13 @@ switch ($method) {
 		break;
 	case 'PUT':
 		$user = $input["user"];
-		$password = $input["password"];
+		$pass = $input["password"];
 		$email = $input["email"];
 		$type = $input["type"];
 
 		if($type == "registration"){
 			pg_prepare($dbconn, "insertUser", "INSERT INTO appuser values($1, $2, $3)");
-			$result = pg_execute($dbconn, "insertUser", array($user, $password, $email));
+			$result = pg_execute($dbconn, "insertUser", array($user, $pass, $email));
 						
 			$reply["status"] = ($result == false) ? "User already exists!" : "Success!";
 			if($result != false){
@@ -52,14 +52,14 @@ switch ($method) {
 			$user = $_SERVER["PHP_AUTH_USER"];
 			$pass = $_SERVER["PHP_AUTH_PW"];
 			$score = $input["score"];
-			pg_prepare($dbconn, "loginUser", "SELECT username FROM appuser WHERE username=$1 and password=$2");
-			$result = pg_execute($dbconn, "loginUser", array($user, $password));
+			pg_prepare($dbconn, "authorizeUser", "SELECT username FROM appuser WHERE username=$1 and password=$2");
+			$result = pg_execute($dbconn, "authorizeUser", array($user, $pass));
 			$row = pg_fetch_array($result);
 
 			if($row != false){
 				$reply["score"] = $score;
-				pg_prepare($dbconn, "loginUser", "INSERT INTO scores values($1, $2)");
-				pg_execute($dbconn, "loginUser", array($user, $score));
+				pg_prepare($dbconn, "newScore", "INSERT INTO scores values($1, $2)");
+				pg_execute($dbconn, "newScore", array($user, $score));
 				header($_SERVER['SERVER_PROTOCOL']." 200 OK");
 			} else {
 				header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
