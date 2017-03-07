@@ -103,20 +103,29 @@
 			$row = pg_fetch_array($result);
 			if($type == "email"){
 				if($row != false){
-					$reply["status"] = "Profile updated!";
-					updateEmail($dbconn, $user, $update);
-					header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+					if(updateEmail($dbconn, $user, $update)){
+						$reply["status"] = "Profile updated!";
+						header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+					} else {
+						$reply["status"] = "Invalid modification.";
+						header($_SERVER['SERVER_PROTOCOL']." 400 Bad Request");
+					}
 				} else {
 					$reply["status"] = "Unauthorized modification.";
 					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 				}
 			} else if ($type == "password"){
 				if($row != false){
-					$reply["status"] = "Profile updated!";
-					updatePassword($dbconn, $user, $update);
-					header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+					if(updatePassword($dbconn, $user, $update)){
+						 $reply["status"] = "Profile updated!";
+						 header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+					}
+					else {
+						$reply["status"] = "Invalid modification.";
+						header($_SERVER['SERVER_PROTOCOL']." 400 Bad Request");
+					}
 				} else {
-					$reply["status"] = "Unauthorized modification.";
+					$reply["status"] = "Invalid modification.";
 					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 				}
 			} else {

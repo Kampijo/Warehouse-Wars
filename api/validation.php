@@ -6,54 +6,51 @@
         $input = htmlspecialchars($input);
         return $input;
     }
-    function validateNewProfile($user, $password, $fName, $lName, $email){
+    function validateLogin($user, $password){
         $user=sanitizeInput($user);
         $password=sanitizeInput($password);
-        $fName=sanitizeInput($fName);
-        $lName=sanitizeInput($lName);
+        $valid = true;
 
-        $errors=array();
         if (!preg_match("/^[a-zA-Z0-9]*$/", $user)) {
-            $errors[]='username can only contain letters and numbers';
+            $valid = false;
         }
         if (!preg_match("/^[a-zA-Z0-9]*$/", $password)) {
-            $errors[]='password can only contain letters and numbers';
+            $valid = false;
         }
-        if (!preg_match("/^[a-zA-Z ]*$/", $fName)) {
-            $errors[]='first name can only contain letters';
-        }
-        if (!preg_match("/^[a-zA-Z ]*$/", $lName)) {
-            $errors[]='last name can only contain letters';
-        }
-        if (!empty($email)) {
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "invalid email";
-            }
-        }
-        return $errors;
+        return $valid;
     }
-    function validateProfile($password, $fName, $lName, $email){
+    function validateNewUser($user, $password, $email){
+        $user=sanitizeInput($user);
         $password=sanitizeInput($password);
-        $fName=sanitizeInput($fName);
-        $lName=sanitizeInput($lName);
+        $valid = true;
 
-        $errors=array();
-        if(!empty($password)) {
-            if (!preg_match("/^[a-zA-Z0-9]*$/", $password)) {
-                $errors[] = 'password can only contain letters and numbers';
-            }
+        if (!preg_match("/^[a-zA-Z0-9]*$/", $user)) {
+            $valid = false;
         }
-        if (!preg_match("/^[a-zA-Z ]*$/", $fName)) {
-            $errors[]='first name can only contain letters';
-        }
-        if (!preg_match("/^[a-zA-Z ]*$/", $lName)) {
-            $errors[]='last name can only contain letters';
+        if (!preg_match("/^[a-zA-Z0-9]*$/", $password)) {
+            $valid = false;
         }
         if (!empty($email)) {
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $errors[] = "invalid email";
+                $valid = false;
             }
         }
-        return $errors;
+        return $valid;
+    }
+    function validateEmail($email){
+        $valid = true;
+        if (!empty($email)) {
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                $valid = false;
+            }
+        }
+        return $valid;
+    }
+    function validatePassword($password){
+        $valid = true;
+        if (!preg_match("/^[a-zA-Z0-9]*$/", $password)) {
+            $valid = false;
+        }
+        return $valid;
     }
 ?>
