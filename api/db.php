@@ -10,6 +10,11 @@ function getHiscores($dbconn){
 	$result = pg_execute($dbconn, "getHiScores", array());
 	return $result;
 }
+function getScores($dbconn, $user){
+	pg_prepare($dbconn, "getScores", "SELECT score FROM scores WHERE username=$1");
+	$result = pg_execute($dbconn, "getScores", array($user));
+	return $result;
+}
 function insertUser($dbconn,$user, $pass, $email){
 	pg_prepare($dbconn, "insertUser", "INSERT INTO appuser values($1, $2, $3)");
 	$result = pg_execute($dbconn, "insertUser", array($user, $pass, $email));

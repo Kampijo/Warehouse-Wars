@@ -31,12 +31,16 @@
 					$row = pg_fetch_array($result);
 					$reply["status"] = ($row == false) ? "Incorrect information entered." : "Success!";
 					if($row != false){
-						// insert specific hiscore query here
+						$playerScores = getScores($dbconn, $user);
+						$scores = array();
+						while($score = pg_fetch_array($playerScores){
+							$scores[] = $score["score"];
+						}
+						$reply["scores"] = $scores;
 						header($_SERVER['SERVER_PROTOCOL']."200 OK");
 					} else {
 						header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
-					}
-					
+					}	
 				} else {
 					header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
 				}
@@ -70,14 +74,32 @@
 				$result = authorizeUser($dbconn,$user, $pass);
 				$row = pg_fetch_array($result);
 				if($row != false){
-					insertScore($user, $score);
+					$reply["status"] = "Success!";
+					insertScore($dbconn,$user, $score);
 					header($_SERVER['SERVER_PROTOCOL']." 200 OK");
 				} else {
+					$reply["status"] = "Unauthorized score insert.";
 					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 				}
 			}
 			break;
 		case 'POST':
+			$newpass = $input["password"];
+			$newemail = $input["email"];
+		
+			$user = $_SERVER["PHP_AUTH_USER"];
+			$pass = $_SERVER["PHP_AUTH_PW"];
+			
+			$result = authorizeUser($dbconn,$user,$pass);
+			$row = pg_fetch_array($result);
+			if($row != false){
+				$reply["status"] = "Success!";
+				updateInfo($dbconn, $user, $newemail, $newpass);
+				header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+			} else {
+				$reply["status"] = "Unauthorized modification.";
+				header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
+			}
 			break;
 		case 'DELETE':
 			break;

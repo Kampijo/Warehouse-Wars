@@ -23,12 +23,17 @@ function resetGame(){
 function playGame(){
 	setupGame();
 	startGame();
+	$("#LoginPage").hide();
+	$("#ProfilePage").hide();
+	$("#RegisterPage").hide();
+	$("#Hiscores").hide();
+	$("#game").show();
 }
 function showProfile(){
 	pauseGame();
 	resetGame();
-	$("#game").hide();
-	$("#greeting").html("Hello there, "+sessionStorage.user+"!");
+	$("#game").hide();	
+	$("#greeting").html("Hello there, "+sessionStorage.getItem('user')+"!");
 	$("#ProfilePage").show();
 }
 function updateProfile(){
@@ -41,14 +46,11 @@ function loginFunction(){
               headers: { "Authorization": "Basic " + btoa($("#loginuser").val() + ":" + $("#loginpasswd").val())}
           };
 	$.ajax(params).done(function(data){
-		alert(data["status"]);
-		if(!sessionStorage.user) sessionStorage.user=$("#loginuser").val();
-		if(!sessionStorage.pass) sessionStorage.pass=$("#loginpasswd").val();
-		$("#LoginPage").hide();
-		$("#Hiscores").hide();
+		alert(data["status"]);	
+		sessionStorage.setItem('user',$("#loginuser").val());
+		sessionStorage.setItem('pass',$("#loginpasswd").val());
 		$("#links").show();
         playGame();
-        $("#game").show();	
 	}).fail(function(data){
 		var response = JSON.parse(data["responseText"]);
 		alert(response["status"]);
@@ -57,8 +59,7 @@ function loginFunction(){
 	});
 }
 function logoutFunction(){
-	sessionStorage.user=null;
-	sessionStorage.pass=null;
+	sessionStorage.clear();
 	window.location.reload();
 	console.log("LOGGED OUT.");
 }
@@ -74,11 +75,8 @@ function registerFunction(){
 		};
 	$.ajax(params).done(function(data){
 		alert(data["status"]);
-		$("#RegisterPage").hide();
-		$("#Hiscores").hide();
 		$("#links").show();
 		playGame();
-		$("#game").show();
 	}).fail(function(data){
 		var response = JSON.parse(data["responseText"]);
 		alert(response["status"]);
@@ -90,10 +88,8 @@ function putScore(){
 	var params = {
 			method: "PUT",
 			url: "api/api.php",
-			user: sessionStorage.user,
-			password: sessionStorage.pass,
 			data: JSON.stringify(input),
-			headers: { "Authorization": "Basic " + btoa($("#loginuser").val() + ":" + $("#loginpasswd").val())}
+			headers: { "Authorization": "Basic " + btoa(sessionStorage.getItem('user') + ":" + sessionStorage.getItem('pass'))}
 		};
 	$.ajax(params).done();
 }
