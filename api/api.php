@@ -27,17 +27,18 @@
 					} else {
 						header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 					}
-				} else if ($request[1] == $user && $request[2] == "highScores") {
+				// get score for the specified user (only accessible to user)
+				} else if ($request[1] == $user && $request[2] == "hiScores") {
 					$row = pg_fetch_array($result);
 					$reply["status"] = ($row == false) ? "Incorrect information entered." : "Success!";
 					if($row != false){
 						$playerScores = getScores($dbconn, $user);
 						$scores = array();
-						while($score = pg_fetch_array($playerScores){
+						while($score = pg_fetch_array($playerScores)){
 							$scores[] = $score["score"];
 						}
-						$reply["scores"] = $scores;
-						header($_SERVER['SERVER_PROTOCOL']."200 OK");
+						$reply["response"] = $scores;
+						header($_SERVER['SERVER_PROTOCOL']." 200 OK");
 					} else {
 						header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 					}	
@@ -52,6 +53,7 @@
 				}
 				$reply["status"]="Success!";
 				$reply["response"] = $hiscores;
+				header($_SERVER['SERVER_PROTOCOL']." 200 OK");
 			}
 			break;
 		case 'PUT':
@@ -84,21 +86,32 @@
 			}
 			break;
 		case 'POST':
-			$newpass = $input["password"];
-			$newemail = $input["email"];
+			$type = $input["type"];
+			$update = $input["input"];
 		
 			$user = $_SERVER["PHP_AUTH_USER"];
 			$pass = $_SERVER["PHP_AUTH_PW"];
 			
 			$result = authorizeUser($dbconn,$user,$pass);
 			$row = pg_fetch_array($result);
-			if($row != false){
-				$reply["status"] = "Success!";
-				updateInfo($dbconn, $user, $newemail, $newpass);
-				header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+			if($type == "email"){
+				if($row != false){
+					$reply["status"] = "Profile updated!";
+					updateEmail($dbconn, $user, $update);
+					header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+				} else {
+					$reply["status"] = "Unauthorized modification.";
+					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
+				}
 			} else {
-				$reply["status"] = "Unauthorized modification.";
-				header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
+				if($row != false){
+					$reply["status"] = "Profile updated!";
+					updatePassword($dbconn, $user, $update);
+					header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+				} else {
+					$reply["status"] = "Unauthorized modification.";
+					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
+				}
 			}
 			break;
 		case 'DELETE':

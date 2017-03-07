@@ -11,7 +11,7 @@ function getHiscores($dbconn){
 	return $result;
 }
 function getScores($dbconn, $user){
-	pg_prepare($dbconn, "getScores", "SELECT score FROM scores WHERE username=$1");
+	pg_prepare($dbconn, "getScores", "SELECT score FROM scores WHERE username=$1 ORDER By score DESC");
 	$result = pg_execute($dbconn, "getScores", array($user));
 	return $result;
 }
@@ -24,14 +24,14 @@ function insertScore($dbconn,$user, $score){
 	pg_prepare($dbconn, "newScore", "INSERT INTO scores values($1, $2)");
 	pg_execute($dbconn, "newScore", array($user, $score));
 }
-function updateInfo($dbconn,$user, $email, $password){
-	if(!empty($password)){
-		pg_prepare($dbconn, "updateInfo", "UPDATE appuser SET email=$1, password=$2 WHERE username=$3");
-		pg_execute($dbconn, "updateInfo", array($email, $password, $user));
-	} else {
-		pg_prepare($dbconn, "updateInfo", "UPDATE appuser SET email=$1 WHERE username=$2");
-		pg_execute($dbconn, "updateInfo", array($email, $user));
-	}
+function updateEmail($dbconn,$user, $email){
+	
+	pg_prepare($dbconn, "updateEmail", "UPDATE appuser SET email=$1 WHERE username=$2");
+	pg_execute($dbconn, "updateEmail", array($email, $user));	
+}
+function updatePassword($dbconn,$user,$password){
+	pg_prepare($dbconn, "updatePassword", "UPDATE appuser SET password=$1 WHERE username=$2");
+	pg_execute($dbconn, "updatePassword", array($password, $user));
 }
 
 ?>

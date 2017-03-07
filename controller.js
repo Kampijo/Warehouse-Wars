@@ -19,14 +19,15 @@ function resetGame(){
 	stage=null;
 	interval=null;
 	score=0;
+	$('#score').html(score);
 }
 function playGame(){
+	resetGame();
 	setupGame();
 	startGame();
 	$("#LoginPage").hide();
 	$("#ProfilePage").hide();
 	$("#RegisterPage").hide();
-	$("#Hiscores").hide();
 	$("#game").show();
 }
 function showProfile(){
@@ -34,10 +35,39 @@ function showProfile(){
 	resetGame();
 	$("#game").hide();	
 	$("#greeting").html("Hello there, "+sessionStorage.getItem('user')+"!");
+	getScores();
 	$("#ProfilePage").show();
 }
-function updateProfile(){
-
+function updateEmail(){
+	var input = {"type":"email", "input":$("#newemail").val()};
+	var params = {
+			 method: "POST",
+			 url: "api/api.php",
+			 data: JSON.stringify(input),
+			 headers: { "Authorization": "Basic " + btoa(sessionStorage.getItem('user')+":"+sessionStorage.getItem('pass'))}
+			};
+		$.ajax(params).done(function(data){
+			alert(data["status"]);
+		}).fail(function(data){
+			var response = JSON.parse(data["responseText"]);
+			alert(response["status"]);
+		});
+}
+function updatePassword(){
+	var input = {"type":"password", "input":$("#newpasswd").val()};
+    var params = {
+               method: "POST",
+               url: "api/api.php",
+               data: JSON.stringify(input),
+               headers: { "Authorization": "Basic " + btoa(sessionStorage.getItem('user')+":"+sessionStorage.getItem('pass'))}
+              };
+          $.ajax(params).done(function(data){
+              alert(data["status"]);
+			  sessionStorage.setItem('pass', $("#newpasswd").val());
+          }).fail(function(data){
+              var response = JSON.parse(data["responseText"]);
+              alert(response["status"]);
+          });
 }
 function loginFunction(){
 	var params = {
@@ -60,8 +90,7 @@ function loginFunction(){
 }
 function logoutFunction(){
 	sessionStorage.clear();
-	window.location.reload();
-	console.log("LOGGED OUT.");
+	window.location.reload();	
 }
 function registerFunction(){
 	var input = { "user": $("#registeruser").val(), "password": $("#registerpasswd").val(),
@@ -92,6 +121,21 @@ function putScore(){
 			headers: { "Authorization": "Basic " + btoa(sessionStorage.getItem('user') + ":" + sessionStorage.getItem('pass'))}
 		};
 	$.ajax(params).done();
+}
+function getScores(){
+	var params = {
+			method: "GET",
+			url: "api/api.php/user/"+sessionStorage.getItem('user')+"/hiScores",
+			headers: { "Authorization": "Basic " + btoa(sessionStorage.getItem('user') + ":" + sessionStorage.getItem('pass'))}
+		};
+	$.ajax(params).done(function(data){
+		var scores = data["response"];		
+		var scoreHTML = "<tr><td>Score</td></tr>";
+		for(var i = 0; i < scores.length; i++){
+			scoreHTML = scoreHTML+"<tr><td>"+scores[i]+"</td></tr>";
+		}
+		$("#userscorestable").html(scoreHTML);
+	});
 }
 function getHiscores(){
 	var params = {
@@ -176,6 +220,16 @@ $(function(){
 	$('#Register').click(function(){
 		if($('#registeruser')[0].checkValidity() && $('#registerpasswd')[0].checkValidity() && $('#registeremail')[0].checkValidity()){
 			registerFunction();
+		}
+	});
+	$('#updateEmail').click(function(){
+		if($('#newemail')[0].checkValidity()){
+			updateEmail();
+		}
+	});
+	$('#updatePassword').click(function(){
+		if($('#newpasswd')[0].checkValidity()){
+			updatePassword();
 		}
 	});
 });

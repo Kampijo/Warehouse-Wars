@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Restricted Files"
+AuthUserFile "/student/lopeznyg/www/ww/htpasswd"
+Require user self

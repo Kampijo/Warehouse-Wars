@@ -31,10 +31,13 @@
 
 						<input id="Login" type="button" value="Login"/>
 						<input id="showRegister" type="button" value ="Register"/>
-					<!--	<input id="ForgotButton" type="button" value ="Forgot Password"/> -->
-
 					</fieldset>
 				</form>	
+			  
+                  <h1>Hiscores</h1>
+                  <table>
+                      <div id="hiscorestable"> </div>
+                  </table>
 			</div>
 
 			<div id="RegisterPage">
@@ -56,19 +59,20 @@
 			    <form>
 			    	<div id="greeting"> </div>
 			        <fieldset>
-			            <legend>Profile</legend>
-			            <p><label for="password">Password</label><input id="newpasswd" type="password" title="8 characters minimum. At lease one uppercase character and one number required." 
-															pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{8,}$" name="password" required>
+			            <legend>Email</legend>
 			            <p><label for="email">email</label><input id="newemail" type="email" name="email" required>
-			            <p><input id="updateProfile" type="button" value="Update"/>
+			            <p><input id="updateEmail" type="button" value="Update"/>
 			        </fieldset>
+					<fieldset>
+						<legend>Password</legend>
+						<p><label for="password">Password</label><input id="newpasswd" type="password" title="8 characters minimum. At lease one uppercase character and one number required."
+                                                              pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{8,}$" name="password" required>
+						<p><input id="updatePassword" type="button" value="Update"/>
+					</fieldset>
 				</form>
-			</div>
-
-			<div id="Hiscores">
-				<h1>Hiscores</h1>
+				<h1>Your Scores</h1>
 				<table>
-					<div id="hiscorestable"> </div>
+					<div id="userscorestable"> </div>
 				</table>
 			</div>
 

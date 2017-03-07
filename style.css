@@ -5,6 +5,10 @@
 	border:1px solid black;
 	width:100px;
 }
+#userscorestable td {
+	border:1px solid black;
+	width:50px;
+}
 #links {
 	height:40px;
 }
