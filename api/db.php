@@ -20,6 +20,12 @@ function insertUser($dbconn,$user, $pass, $email){
 	$result = pg_execute($dbconn, "insertUser", array($user, $pass, $email));
 	return $result;
 }
+function deleteUser($dbconn, $user){
+	pg_prepare($dbconn, "deleteScores", "DELETE FROM scores WHERE username=$1");
+	pg_execute($dbconn, "deleteScores", array($user));
+	pg_prepare($dbconn, "deleteUser", "DELETE FROM appuser WHERE username=$1");
+	pg_execute($dbconn, "deleteUser", array($user));
+}
 function insertScore($dbconn,$user, $score){
 	pg_prepare($dbconn, "newScore", "INSERT INTO scores values($1, $2)");
 	pg_execute($dbconn, "newScore", array($user, $score));

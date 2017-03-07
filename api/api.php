@@ -19,12 +19,13 @@
 				$result = authorizeUser($dbconn,$user, $pass);	
 				if($request[1] == $user && count($request) == 2){
 					$row = pg_fetch_array($result);
-					$reply["status"] = ($row == false) ? "Incorrect information entered." : "Success!";
 					if($row != false){
+						$reply["status"] = "Success!";
 						$reply["name"] = $row["username"];
 						$reply["email"] = $row["email"];
 						header($_SERVER['SERVER_PROTOCOL']." 200 OK");
 					} else {
+						$reply["status"] = "Incorrect information entered.";
 						header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 					}
 				// get score for the specified user (only accessible to user)
@@ -45,7 +46,7 @@
 				} else {
 					header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
 				}
-			} else { // if type is hiscores, then return the top 10 scores in database (scores database contains no sensitive information)
+			} else if ($type == "hiScores"){ // if type is hiscores, then return the top 10 scores in database (scores database contains no sensitive information)
 				$result = getHiscores($dbconn);
 				$hiscores = array();
 				while($row = pg_fetch_array($result)){
@@ -54,6 +55,9 @@
 				$reply["status"]="Success!";
 				$reply["response"] = $hiscores;
 				header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+			} else {
+				$reply["status"] = "Not found.";
+				header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
 			}
 			break;
 		case 'PUT':
@@ -69,7 +73,7 @@
 				} else {
 					header($_SERVER['SERVER_PROTOCOL']." 403 Forbidden");
 				}
-			} else {
+			} else if ($type == "score"){
 				$user = $_SERVER["PHP_AUTH_USER"];
 				$pass = $_SERVER["PHP_AUTH_PW"];
 				$score = $input["score"];
@@ -83,6 +87,9 @@
 					$reply["status"] = "Unauthorized score insert.";
 					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 				}
+			} else {
+				$reply["status"] = "Not found.";
+				header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
 			}
 			break;
 		case 'POST':
@@ -103,7 +110,7 @@
 					$reply["status"] = "Unauthorized modification.";
 					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 				}
-			} else {
+			} else if ($type == "password"){
 				if($row != false){
 					$reply["status"] = "Profile updated!";
 					updatePassword($dbconn, $user, $update);
@@ -112,9 +119,33 @@
 					$reply["status"] = "Unauthorized modification.";
 					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 				}
+			} else {
+				$reply["status"] = "Not found.";
+				header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
 			}
 			break;
 		case 'DELETE':
+			$type = $request[0];
+			$delete = $request[1];
+			$user = $_SERVER['PHP_AUTH_USER'];
+			$pass = $_SERVER['PHP_AUTH_PASS'];
+
+			if($type == "user" && $user == $delete){
+				$result = authorizeUser($dbconn,$user,$pass);
+				$row = pg_fetch_array($result);
+			
+				if(row != false){
+					$reply["status"] = "Delete successful.";
+					deleteUser($dbconn, $user);
+					header($_SERVER['SERVER_PROTOCOL']." 200 OK");
+				} else {
+					$reply["status"] = "Unauthorized modification.";
+					header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
+				}
+			} else {
+				$reply["status"] = "Not found.";
+				header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
+			}
 			break;
 	}
 	print json_encode($reply);

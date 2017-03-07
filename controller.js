@@ -92,6 +92,21 @@ function logoutFunction(){
 	sessionStorage.clear();
 	window.location.reload();	
 }
+function deleteAccount(){
+	var params = {
+			method: "GET",
+			url: "api/api.php/user/"+sessionStorage.getItem("user"),
+			headers: { "Authorization": "Basic " + btoa(sessionStorage.getItem("user") + ":" + sessionStorage.getItem("pass")) }
+		};
+	$.ajax(params).done(function(data){
+		alert(data["status"]);
+		logoutFunction();
+	}).fail(function(data){
+		var response = JSON.parse(data["responseText"]);
+		alert(response["status"]);
+	});
+
+}
 function registerFunction(){
 	var input = { "user": $("#registeruser").val(), "password": $("#registerpasswd").val(),
                        "email": $("#registeremail").val(), "type":"registration"};
@@ -231,5 +246,10 @@ $(function(){
 		if($('#newpasswd')[0].checkValidity()){
 			updatePassword();
 		}
+	});
+	$('#deleteAccount').click(function(){
+		if(confirm("Are you sure? You cannot undo these changes.")){
+			deleteAccount();
+		} 
 	});
 });
