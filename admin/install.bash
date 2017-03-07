@@ -10,7 +10,7 @@ read -s -p "Enter htaccess password: " htaccesspass
 
 echo -e "\n"
 
-cd "parent_path"
+cd "$parent_path"
 sed -i "s/hosthere/$host/g" ../api/api.php
 sed -i "s/dbnamehere/$dbname/g" ../api/api.php
 sed -i "s/userhere/$utorid/g" ../api/api.php
@@ -21,4 +21,4 @@ psql -h mcsdb.utm.utoronto.ca -d $dbname -U $utorid -f schema.sql
 htpasswd -bms ../htpasswd self $htaccesspass
 path=`pwd`/../htpasswd 
 echo $path
-sed -i "s/pathhere/$path/g" ../.htaccess
+sed -i "s@pathhere@$path@g" ../.htaccess
