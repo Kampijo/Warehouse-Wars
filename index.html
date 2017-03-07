@@ -29,8 +29,8 @@
 						<p> <label for="user">User</label><input id="loginuser" type="text" name="user" value="" required>
 						<p> <label for="password">Password</label><input id="loginpasswd" type="password" name="password" required></p>
 
-						<input id="LoginButton" type="button" value="Login"/>
-						<input id="RegisterButton" type="button" value ="Register"/>
+						<input id="Login" type="button" value="Login"/>
+						<input id="showRegister" type="button" value ="Register"/>
 					<!--	<input id="ForgotButton" type="button" value ="Forgot Password"/> -->
 
 					</fieldset>
@@ -46,7 +46,20 @@
 			            <p><label for="password">Password</label><input id="registerpasswd" type="password" title="8 characters minimum. At lease one uppercase character and one number required." 
 															pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{8,}$" name="password" required>
 			            <p><label for="email">email</label><input id="registeremail" type="email" name="email" required>
-			            <p><input id="submitRegister" type="button" value="Submit"/>
+			            <p><input id="Register" type="button" value="Submit"/>
+			        </fieldset>
+				</form>
+			</div>
+
+			<div id="ProfilePage">
+				<h1>Profile</h1>
+			    <form>
+			        <fieldset>
+			            <legend>Profile</legend>
+			            <p><label for="password">Password</label><input id="newpasswd" type="password" title="8 characters minimum. At lease one uppercase character and one number required." 
+															pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{8,}$" name="password" required>
+			            <p><label for="email">email</label><input id="newemail" type="email" name="email" required>
+			            <p><input id="updateProfile" type="button" value="Submit"/>
 			        </fieldset>
 				</form>
 			</div>

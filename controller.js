@@ -24,7 +24,15 @@ function playGame(){
 	setupGame();
 	startGame();
 }
-function showProfile(){}
+function showProfile(){
+	pauseGame();
+	resetGame();
+	$("#game").hide();
+	$("#ProfilePage").show();
+}
+function updateProfile(){
+
+}
 function loginFunction(){
 	var params = {
               method: "GET",
@@ -159,15 +167,15 @@ $(function(){
 	getHiscores();
 	document.addEventListener('keydown', function(event) { readKeyboard(event); });
 
-	$('#RegisterButton').click(function(){ 
+	$('#showRegister').click(function(){ 
 		$('#LoginPage').hide();
 		$('#RegisterPage').show(); 
 
 	});
-	$('#LoginButton').click(function(){
+	$('#Login').click(function(){
 		loginFunction();
 	});
-	$('#submitRegister').click(function(){
+	$('#Register').click(function(){
 		if($('#registeruser')[0].checkValidity() && $('#registerpasswd')[0].checkValidity() && $('#registeremail')[0].checkValidity()){
 			registerFunction();
 		}
