@@ -1,5 +1,5 @@
 <?php
-$dbconn = pg_connect("host=mcsdb.utm.utoronto.ca dbname=lopeznyg_309 user=lopeznyg password=13779");
+	$dbconn = pg_connect("host=mcsdb.utm.utoronto.ca dbname=lopeznyg_309 user=lopeznyg password=13779");
 
 function authorizeUser($user, $pass){
 	pg_prepare($dbconn, "authorizeUser", "SELECT * FROM appuser WHERE username=$1 and password=$2");
@@ -23,17 +23,11 @@ function insertScore($user, $score){
 function updateInfo($user, $email, $password){
 	if(!empty($password)){
 		pg_prepare($dbconn, "updateInfo", "UPDATE appuser SET email=$1, password=$2 WHERE username=$3");
-		pg_execute($dbconn, "updateInfo", array($email, $password, $user);
+		pg_execute($dbconn, "updateInfo", array($email, $password, $user));
 	} else {
 		pg_prepare($dbconn, "updateInfo", "UPDATE appuser SET email=$1 WHERE username=$2");
-		pg_execute($dbconn, "updateInfo", array($email, $user);
+		pg_execute($dbconn, "updateInfo", array($email, $user));
 	}
 }
-
-
-
-
-
-
 
 ?>

@@ -3,7 +3,7 @@
 <?php
 	$reply = array();
 	header('Content-Type: application/json');
-	require_once "db.php"
+	require "db.php";
 
 	$method = $_SERVER['REQUEST_METHOD']; # request method
 	$request = explode('/', trim($_SERVER['PATH_INFO'],'/')); // for get 
@@ -16,7 +16,7 @@
 			$user = $_SERVER["PHP_AUTH_USER"];
 			$pass = $_SERVER["PHP_AUTH_PW"];
 			if($type == "user"){	
-				if($request[1] == $user && count($request) == 2){
+				if($request[1] == $user){
 					// only get information that matches with what is in authorization header 
 					pg_prepare($dbconn, "authorizeUser", "SELECT * FROM appuser WHERE username=$1 and password=$2");
 					$result = pg_execute($dbconn, "authorizeUser", array($user, $pass));
@@ -29,7 +29,7 @@
 					} else {
 						header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 					}
-				} else if ($request[1] == $user && request[2] == "highScores") {
+/*				} elseif ($request[1] == $user && request[2] == "highScores") {
 					pg_prepare($dbconn, "authorizeUser", "SELECT * FROM appuser WHERE username=$1 and password=$2");
 					$result = pg_execute($dbconn, "authorizeUser", array($user, $pass));
 					$row = pg_fetch_array($result);
@@ -40,7 +40,7 @@
 					}
 					
 				} else {
-					header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
+	*/				header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
 				}
 			} else { // if type is hiscores, then return the top 10 scores in database (scores database contains no sensitive information)
 				pg_prepare($dbconn, "getHiScores", "SELECT * FROM scores ORDER BY score DESC LIMIT 10");

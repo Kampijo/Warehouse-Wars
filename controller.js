@@ -160,6 +160,7 @@ $(function(){
 
 	$('#LoginPage').show();
 	$('#RegisterPage').hide();
+	$('#ProfilePage').hide();
 	$('#game').hide();
 	$('#links').hide();
 	$('#score').html(score);
