@@ -1,9 +1,8 @@
 # Your RESTFUL API
-
 <?php
 	$reply = array();
 	header('Content-Type: application/json');
-	require "db.php";
+	require_once "db.php";
 	$method = $_SERVER['REQUEST_METHOD']; # request method
 	$request = explode('/', trim($_SERVER['PATH_INFO'],'/')); // for get 
 	$input = json_decode(file_get_contents('php://input'),true); // for post and put request
@@ -42,12 +41,13 @@
 					header($_SERVER['SERVER_PROTOCOL']." 404 Not Found");
 				}
 			} else { // if type is hiscores, then return the top 10 scores in database (scores database contains no sensitive information)
-				pg_prepare($dbconn, "getHiScores", "SELECT * FROM scores ORDER BY score DESC LIMIT 10");
-				$result = pg_execute($dbconn, "getHiScores", array());
+				$result = getHiscores($dbconn);
 				$hiscores = array();
+				$reply["result"]=$result;
 				while($row = pg_fetch_array($result)){
 					$hiscores[] = array("user" => $row["username"], "score" => $row["score"]);
 				}
+		
 				$reply["status"]="Success!";
 				$reply["response"] = $hiscores;
 			}
@@ -90,5 +90,4 @@
 			break;
 	}
 	print json_encode($reply);
-?>
 ?>
