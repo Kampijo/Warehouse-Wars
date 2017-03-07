@@ -94,7 +94,7 @@ function logoutFunction(){
 }
 function deleteAccount(){
 	var params = {
-			method: "GET",
+			method: "DELETE",
 			url: "api/api.php/user/"+sessionStorage.getItem("user"),
 			headers: { "Authorization": "Basic " + btoa(sessionStorage.getItem("user") + ":" + sessionStorage.getItem("pass")) }
 		};
@@ -119,7 +119,9 @@ function registerFunction(){
 		};
 	$.ajax(params).done(function(data){
 		alert(data["status"]);
-		$("#links").show();
+		sessionStorage.setItem('user', $("#registeruser").val());
+		sessionStorage.setItem('pass', $("#registerpasswd").val());
+		$('#links').show();
 		playGame();
 	}).fail(function(data){
 		var response = JSON.parse(data["responseText"]);
