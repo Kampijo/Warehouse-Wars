@@ -7,6 +7,7 @@
 	$method = $_SERVER['REQUEST_METHOD']; # request method
 	$request = explode('/', trim($_SERVER['PATH_INFO'],'/')); // for get 
 	$input = json_decode(file_get_contents('php://input'),true); // for post and put request
+	$dbconn = pg_connect("host=mcsdb.utm.utoronto.ca dbname=lopeznyg_309 user=lopeznyg password=13779");
 	
 	switch ($method) {
 		case 'GET':
@@ -26,7 +27,7 @@
 					} else {
 						header($_SERVER['SERVER_PROTOCOL']." 401 Unauthorized");
 					}
-				} else if ($request[1] == $user && request[2] == "highScores") {
+				} else if ($request[1] == $user && $request[2] == "highScores") {
 					$row = pg_fetch_array($result);
 					$reply["status"] = ($row == false) ? "Incorrect information entered." : "Success!";
 					if($row != false){
