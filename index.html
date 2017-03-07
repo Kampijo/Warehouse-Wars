@@ -42,7 +42,7 @@
 			    <form>
 			        <fieldset>
 			            <legend>Registration</legend>
-			            <p><label for="user">User</label> <input id="registeruser" type="text" name="user" required>
+			            <p><label for="user">User</label> <input id="registeruser" type="text" title="Alphanumeric characters only." pattern="^[a-zA-Z0-9]+$" name="user" required>
 			            <p><label for="password">Password</label><input id="registerpasswd" type="password" title="8 characters minimum. At lease one uppercase character and one number required." 
 															pattern="^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\d).{8,}$" name="password" required>
 			            <p><label for="email">email</label><input id="registeremail" type="email" name="email" required>
@@ -54,6 +54,7 @@
 			<div id="ProfilePage">
 				<h1>Profile</h1>
 			    <form>
+			    	<div id="greeting"> </div>
 			        <fieldset>
 			            <legend>Profile</legend>
 			            <p><label for="password">Password</label><input id="newpasswd" type="password" title="8 characters minimum. At lease one uppercase character and one number required." 

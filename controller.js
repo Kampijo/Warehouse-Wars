@@ -28,6 +28,7 @@ function showProfile(){
 	pauseGame();
 	resetGame();
 	$("#game").hide();
+	$("#greeting").html("Hello there, "+sessionStorage.user+"!");
 	$("#ProfilePage").show();
 }
 function updateProfile(){
