@@ -7,7 +7,7 @@
 	$method = $_SERVER['REQUEST_METHOD']; # request method
 	$request = explode('/', trim($_SERVER['PATH_INFO'],'/')); // for get 
 	$input = json_decode(file_get_contents('php://input'),true); // for post and put request
-	$dbconn = pg_connect("host=mcsdb.utm.utoronto.ca dbname=lopeznyg_309 user=lopeznyg password=13779");
+	$dbconn = pg_connect("host=hosthere dbname=dbnamehere user=userhere password=passwordhere");
 	
 	switch ($method) {
 		case 'GET':

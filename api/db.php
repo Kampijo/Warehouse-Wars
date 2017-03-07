@@ -1,5 +1,5 @@
 <?php
-require_once "validation.php"
+require_once "validation.php";
 function authorizeUser($dbconn,$user, $pass){
 	$user = sanitizeInput($user);
 	$pass = sanitizeInput($pass);

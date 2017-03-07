@@ -20,5 +20,4 @@ export PGPASSWORD=$password
 psql -h mcsdb.utm.utoronto.ca -d $dbname -U $utorid -f schema.sql
 htpasswd -bms ../htpasswd self $htaccesspass
 path=`pwd`/../htpasswd 
-echo $path
 sed -i "s@pathhere@$path@g" ../.htaccess
