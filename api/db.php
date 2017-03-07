@@ -1,8 +1,6 @@
 <?php
-require_once "validation.php";
+require "validation.php";
 function authorizeUser($dbconn,$user, $pass){
-	$user = sanitizeInput($user);
-	$pass = sanitizeInput($pass);
 	if(validateLogin($user,$pass)){
 		pg_prepare($dbconn, "authorizeUser", "SELECT * FROM appuser WHERE username=$1 and password=$2");
 		$result = pg_execute($dbconn, "authorizeUser", array($user, $pass));
@@ -22,15 +20,13 @@ function getScores($dbconn, $user){
 	return $result;
 }
 function insertUser($dbconn,$user, $pass, $email){
-	$user = sanitizeInput($user);
-	$pass = sanitizeInput($pass);
 	if(validateNewUser($user,$pass,$email)){
 		pg_prepare($dbconn, "insertUser", "INSERT INTO appuser values($1, $2, $3)");
 		$result = pg_execute($dbconn, "insertUser", array($user, $pass, $email));
 		return $result;
-	} else {
-		return false;
-	}
+	} 
+	return false;
+	
 }
 function deleteUser($dbconn, $user){
 	$user = sanitizeInput($user);

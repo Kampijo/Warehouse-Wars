@@ -4,10 +4,11 @@
 	$reply = array();
 	header('Content-Type: application/json');
 	require_once "db.php";
+	require_once "validation.php";
 	$method = $_SERVER['REQUEST_METHOD']; # request method
 	$request = explode('/', trim($_SERVER['PATH_INFO'],'/')); // for get 
 	$input = json_decode(file_get_contents('php://input'),true); // for post and put request
-	$dbconn = pg_connect("host=hosthere dbname=dbnamehere user=userhere password=passwordhere");
+	$dbconn = pg_connect("host=mcsdb.utm.utoronto.ca dbname=lopeznyg_309 user=lopeznyg password=13779");
 	
 	switch ($method) {
 		case 'GET':
@@ -66,11 +67,13 @@
 			$email = $input["email"];
 			$type = $input["type"];
 			if($type == "registration"){
-				$result = insertUser($dbconn,$user, $email, $pass);
-				$reply["status"] = ($result == false) ? "User already exists!" : "Success!";
+				$valid = validateNewUser($user,$pass,$email);
+				$result = insertUser($dbconn,$user, $pass, $email);
+				$reply["status"] = ($valid == false) ? "Invalid information!" : "Success!";
 				if($result != false){
 					header($_SERVER['SERVER_PROTOCOL']." 200 OK");
 				} else {
+					$reply["status"] = "User already exists!";
 					header($_SERVER['SERVER_PROTOCOL']." 403 Forbidden");
 				}
 			} else if ($type == "score"){
