@@ -23,14 +23,14 @@
         $password=sanitizeInput($password);
 		
         if (!preg_match("/^[a-zA-Z0-9]*$/", $user)) {
-            return $user;
+            return false;
         }
         if (!preg_match("/^[a-zA-Z0-9]*$/", $password)) {
-            return $password;
+            return false;
         }
         if (!empty($email)) {
           if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-              return $email;
+              return false;
           }
       }
         return true;
