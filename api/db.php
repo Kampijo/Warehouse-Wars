@@ -16,9 +16,18 @@ function insertUser($user, $pass, $email){
 	$result = pg_execute($dbconn, "insertUser", array($user, $pass, $email));
 	return $result;
 }
-function newScore($user, $score){
+function insertScore($user, $score){
 	pg_prepare($dbconn, "newScore", "INSERT INTO scores values($1, $2)");
 	pg_execute($dbconn, "newScore", array($user, $score));
+}
+function updateInfo($user, $email, $password){
+	if(!empty($password)){
+		pg_prepare($dbconn, "updateInfo", "UPDATE appuser SET email=$1, password=$2 WHERE username=$3");
+		pg_execute($dbconn, "updateInfo", array($email, $password, $user);
+	} else {
+		pg_prepare($dbconn, "updateInfo", "UPDATE appuser SET email=$1 WHERE username=$2");
+		pg_execute($dbconn, "updateInfo", array($email, $user);
+	}
 }
 
 
